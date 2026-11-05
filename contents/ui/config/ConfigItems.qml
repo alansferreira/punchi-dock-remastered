@@ -629,7 +629,8 @@ KCM.SimpleKCM {
             : {"changed": false, "status": "invalid-application"}
         itemConfigurationDialog.showApplicationDropResult(
             containerApplicationDropMessage(result.status,
-                applicationName, containerName), !result.changed)
+                result.application ? result.application.name : applicationName, containerName,
+                result.addedCount || result.applicationCount || 1), !result.changed)
         if (result.changed) {
             itemConfigurationDialog.nestedListChanged(
                 itemDraftController.nestedCount() - 1)
@@ -727,12 +728,21 @@ KCM.SimpleKCM {
 
     // qmllint disable unqualified
     function containerApplicationDropMessage(status, applicationName,
-            containerName) {
+            containerName, applicationCount) {
         if (status === "added") {
+            if (applicationCount > 1) {
+                return i18np("%1 application was added to %2.",
+                    "%1 applications were added to %2.",
+                    applicationCount, containerName)
+            }
             return i18nc("@info:status", "%1 was added to %2.",
                 applicationName, containerName)
         }
         if (status === "duplicate") {
+            if (applicationCount > 1) {
+                return i18n("All dropped applications are already in %1.",
+                    containerName)
+            }
             return i18nc("@info:status", "%1 is already in %2.",
                 applicationName, containerName)
         }
@@ -766,7 +776,8 @@ KCM.SimpleKCM {
             }
         actionDialog.applicationLauncherDropMessage
             = page.containerApplicationDropMessage(result.status,
-                applicationName, containerName)
+                result.application ? result.application.name : applicationName, containerName,
+                result.addedCount || result.applicationCount || 1)
         actionDialog.applicationLauncherDropMessageIsError = !result.changed
         return result.changed
     }

@@ -746,13 +746,18 @@ Item {
             return true
         }
         const urls = event.urls || []
-        return urls.length === 1
-            && /\.desktop$/i.test(String(urls[0] || ""))
+        for (let index = 0; index < urls.length; index++) {
+            if (/\.desktop$/i.test(String(urls[index] || ""))) {
+                return true
+            }
+        }
+        return false
     }
 
     function isApplicationLauncherDrag(event, validation) {
         return dockItemContainer.launcherDropEnabled && event && event.hasUrls
             && (dockItemContainer.hasPunchiLauncherMarker(event)
+                || dockItemContainer.mayContainApplicationLauncher(event)
                 || (validation && validation.accepted))
     }
 
@@ -982,6 +987,11 @@ Item {
         }
     }
 
+    function finishInitialization() {
+        dockItemContainer.positionAnimationReady = true
+        dockItemContainer.taskMinimizedTrackingReady = true
+    }
+
     Component.onCompleted: {
         dockItemContainer.observedTaskCount = dockItemContainer.taskIndicatorCount
         dockItemContainer.observedTaskMinimizedCount
@@ -991,10 +1001,7 @@ Item {
             dockItemContainer.entryScale = 0.88
             entryAnimation.restart()
         }
-        Qt.callLater(function() {
-            dockItemContainer.positionAnimationReady = true
-            dockItemContainer.taskMinimizedTrackingReady = true
-        })
+        Qt.callLater(dockItemContainer.finishInitialization)
         if (dockItemContainer.persistentDropSettle) {
             Qt.callLater(dockItemContainer.playDropSettle)
         }

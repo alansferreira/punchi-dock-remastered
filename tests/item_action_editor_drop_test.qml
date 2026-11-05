@@ -89,6 +89,29 @@ TestCase {
             return { "accepted": false }
         }
 
+        function test_batchDropForwardsEveryUrlAndRevalidatesBeforeEmission() {
+            const window = createTemporaryObject(windowComponent, testCase)
+            verify(window !== null)
+            const editor = window.editor
+            launcherDroppedSpy.target = editor
+            const urls = ["file:///tmp/a.desktop", "file:///tmp/b.desktop"]
+            editor.applicationLauncherDropValidator = function(values) {
+                return { "accepted": values.length === 2 }
+            }
+            verify(editor.beginApplicationLauncherDrop(urls))
+            verify(editor.finishApplicationLauncherDrop(urls))
+            compare(launcherDroppedSpy.count, 1)
+            compare(launcherDroppedSpy.signalArguments[0][0], urls)
+
+            verify(editor.beginApplicationLauncherDrop(urls))
+            editor.applicationLauncherDropValidator = function(values) {
+                return { "accepted": false }
+            }
+            verify(!editor.finishApplicationLauncherDrop(urls))
+            compare(launcherDroppedSpy.count, 1)
+            compare(editor.applicationLauncherDropState, "none")
+        }
+
         const urls = ["file:///tmp/not-an-application.txt"]
         verify(!editor.beginApplicationLauncherDrop(urls))
         compare(editor.applicationLauncherDropState, "rejected")

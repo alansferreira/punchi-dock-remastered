@@ -45,6 +45,9 @@ las funciones marcadas como desarrollo pueden no estar incluidas en la última v
   opcional de aplicaciones abiertas.
 - **Controles de ventanas:** Trabaja con ventanas agrupadas, acciones de aplicación,
   indicadores de cantidad de ventanas y tarjetas o miniaturas en vivo.
+- **Arrastre de lanzadores:** Suelta varios lanzadores .desktop en el dock o en un
+  contenedor manual de aplicaciones. Se valida todo el lote antes de guardarlo;
+  los duplicados no se añaden dos veces.
 - **Filtros de tareas:** En la configuración de Ventanas, combina filtros
   independientes para el escritorio virtual actual, la actividad actual y la
   pantalla del dock. Desactiva un filtro para incluir todos los escritorios,

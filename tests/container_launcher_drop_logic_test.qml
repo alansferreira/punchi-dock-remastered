@@ -111,6 +111,100 @@ TestCase {
         compare(result.items[0].sourceType, "manual")
     }
 
+    function test_batchIsOrderedDeduplicatedAndImmutable() {
+        const original = [manualContainer("grid")]
+        original[0].apps = [launcher()]
+        const second = launcher({
+            "storageId": "org.example.Calc.desktop", "appId": "org.example.Calc",
+            "name": "Calc"
+        })
+        const result = ConfigItems.addApplicationToManualContainer(original, 0, {
+            "applications": [launcher(), second, second]
+        })
+        verify(result.changed)
+        compare(result.addedCount, 1)
+        compare(result.application.name, "Calc")
+        compare(result.container.apps.length, 2)
+        compare(result.container.apps[1].storageId, second.storageId)
+        compare(original[0].apps.length, 1)
+
+        const duplicate = ConfigItems.addApplicationToManualContainer(
+            result.items, 0, { "applications": [launcher(), second] })
+        verify(!duplicate.changed)
+        compare(duplicate.status, "duplicate")
+        verify(duplicate.items === result.items)
+        compare(duplicate.applicationCount, 2)
+    }
+
+    function test_batchFailureLeavesAllOriginalEntriesUntouched() {
+        const original = [manualContainer("fan")]
+        const invalid = ConfigItems.addApplicationToManualContainer(original, 0, {
+            "applications": [launcher(), { "name": "Missing identity" }]
+        })
+        verify(!invalid.changed)
+        compare(invalid.status, "invalid-application")
+        verify(invalid.items === original)
+        compare(original[0].apps.length, 0)
+        const managed = [manualContainer("grid")]
+        managed[0].sourceType = "folder"
+        const rejected = ConfigItems.addApplicationToManualContainer(managed, 0, {
+            "applications": [launcher(), launcher()]
+        })
+        compare(rejected.status, "managed-container")
+        verify(rejected.items === managed)
+        for (const applications of [[], new Array(65).fill(launcher())]) {
+            const result = ConfigItems.addApplicationToManualContainer(
+                original, 0, { "applications": applications })
+            verify(!result.changed)
+            verify(result.items === original)
+        }
+    }
+
+    function test_dockBatchMovesExistingEntriesWithoutLosingTheirActions() {
+        const a = { "type": "app", "storageId": "a.desktop", "actions": [{ "name": "Keep" }] }
+        const b = { "type": "app", "storageId": "b.desktop" }
+        const marker = { "type": "dynamic-apps" }
+        const original = [a, marker, b]
+        const result = ConfigItems.placeApplicationsOnDock(original, [
+            { "storageId": "b.desktop", "existingIndex": 2 },
+            { "storageId": "c.desktop", "existingIndex": -1 },
+            { "storageId": "a.desktop", "existingIndex": 0 },
+            { "storageId": "b.desktop", "existingIndex": 2 }
+        ], 1)
+        compare(result.count, 3)
+        compare(result.items.length, 4)
+        verify(result.items[0] === b)
+        compare(result.items[1].storageId, "c.desktop")
+        verify(result.items[2] === a)
+        verify(result.items[3] === marker)
+        compare(result.items[2].actions[0].name, "Keep")
+        compare(original.length, 3)
+        verify(original[0] === a)
+        verify(original[2] === b)
+    }
+
+    function test_dockBatchInsertionBoundariesAndExistingPositions() {
+        const items = ["a", "b", "c"].map(function(id) {
+            return { "type": "app", "storageId": id + ".desktop" }
+        })
+        for (let target = 0; target <= items.length; target++) {
+            const result = ConfigItems.placeApplicationsOnDock(items, [
+                { "storageId": "a.desktop", "existingIndex": 0 },
+                { "storageId": "c.desktop", "existingIndex": 2 }
+            ], target)
+            const expected = target <= 1
+                ? ["a.desktop", "c.desktop", "b.desktop"]
+                : ["b.desktop", "a.desktop", "c.desktop"]
+            compare(result.items.map(function(item) { return item.storageId }), expected)
+        }
+        const appended = ConfigItems.placeApplicationsOnDock(items, [
+            { "storageId": "d.desktop", "existingIndex": -1 },
+            { "storageId": "e.desktop", "existingIndex": -1 }
+        ], 999)
+        compare(appended.items[3].storageId, "d.desktop")
+        compare(appended.items[4].storageId, "e.desktop")
+    }
+
     function test_folderLayoutUpdateRejectsInvalidInputsAndNoOp() {
         const original = [manualContainer("list")]
         const unchanged = ConfigItems.setFolderLayout(original, 0, "list")

@@ -1151,7 +1151,7 @@ Item {
     }
 
     function containerApplicationDropResult(success, status, applicationName,
-            containerName, container) {
+            containerName, container, applicationCount) {
         const appName = String(applicationName || "").trim()
         const targetName = String(containerName || "").trim().length > 0
             ? String(containerName).trim()
@@ -1159,12 +1159,18 @@ Item {
         let message = ""
         switch (status) {
         case "added":
-            message = i18nc("@info:status", "%1 was added to %2.",
-                appName, targetName)
+            message = applicationCount > 1
+                ? i18np("%1 application was added to %2.",
+                    "%1 applications were added to %2.",
+                    applicationCount, targetName)
+                : i18nc("@info:status", "%1 was added to %2.",
+                    appName, targetName)
             break
         case "duplicate":
-            message = i18nc("@info:status", "%1 is already in %2.",
-                appName, targetName)
+            message = applicationCount > 1
+                ? i18n("All dropped applications are already in %1.", targetName)
+                : i18nc("@info:status", "%1 is already in %2.",
+                    appName, targetName)
             break
         case "managed-container":
             message = i18nc("@info:status",
@@ -1274,50 +1280,53 @@ Item {
     }
 
     function pinAppToDockAt(storageId, targetIndex) {
-        const resolved = root.resolveApplication(storageId, "")
-        if (!resolved || !resolved.resolved) {
-            return root.operationResult(false,
-                resolved ? resolved.status : "unavailable", storageId)
+        return root.pinApplicationsToDockAt([storageId], targetIndex)
+    }
+
+    function pinApplicationsToDockAt(storageIds, targetIndex) {
+        if (!storageIds || storageIds.length === 0 || storageIds.length > 64) {
+            return root.operationResult(false, "invalid-source", "")
         }
-
-        const appName = String(resolved.name || resolved.storageId || "")
-        const existingIndex = root.findDockItemIndexForResolvedApplication(resolved)
-        const boundedTarget = Math.max(0, Math.min(root.dockItems.length,
-            Number.isFinite(Number(targetIndex)) ? Math.round(Number(targetIndex)) : root.dockItems.length))
-        const previousItems = root.dockItems
-        let nextItems = root.dockItems.slice()
-        let pinDescriptor = null
-        let adjustedTarget = boundedTarget
-
-        if (existingIndex >= 0) {
-            pinDescriptor = nextItems[existingIndex]
-            nextItems.splice(existingIndex, 1)
-            if (existingIndex < adjustedTarget) {
-                adjustedTarget--
+        const applications = []
+        for (let index = 0; index < storageIds.length; index++) {
+            const source = storageIds[index]
+            const storageId = typeof source === "string" ? source : source.storageId
+            const resolved = root.resolveApplication(storageId, "")
+            if (!resolved || !resolved.resolved) {
+                return root.operationResult(false,
+                    resolved ? resolved.status : "unavailable", storageId)
             }
-        } else {
-            pinDescriptor = {
-                "type": "app",
-                "name": appName,
-                "icon": String(resolved.icon || "application-x-executable"),
-                "storageId": String(resolved.storageId || ""),
-                "appId": String(resolved.appId || ""),
-                "command": String(resolved.command || ""),
-                "launcherUrl": String(resolved.launcherUrl || "")
-            }
+            applications.push(Object.assign({}, resolved, {
+                "existingIndex": root.findDockItemIndexForResolvedApplication(resolved),
+                "launcherUrl": typeof source === "string"
+                    ? resolved.launcherUrl : source.launcherUrl
+            }))
         }
-
-        adjustedTarget = Math.max(0, Math.min(nextItems.length, adjustedTarget))
-        if (existingIndex >= 0 && adjustedTarget === existingIndex) {
+        const update = ConfigItemsJS.placeApplicationsOnDock(
+            root.dockItems, applications, targetIndex)
+        const appName = String(applications[0].name || applications[0].storageId || "")
+        const candidateRaw = JSON.stringify(update.items)
+        if (candidateRaw === JSON.stringify(root.dockItems)) {
             return root.operationResult(true, "moved", appName)
         }
-        nextItems.splice(adjustedTarget, 0, pinDescriptor)
-        root.dockItems = nextItems
-        if (!root.syncDockItemsConfiguration()) {
-            root.dockItems = previousItems
+        const expectedRaw = String(Plasmoid.configuration.dockItemsJson || "")
+        if (candidateRaw.length > Logic.maximumDockItemsJsonLength
+                || !root.persistenceAdapter
+                || typeof root.persistenceAdapter.commitDockItemsJson !== "function") {
             return root.operationResult(false, "persist-failed", appName)
         }
+        const persistenceResult = root.persistenceAdapter.commitDockItemsJson(
+            expectedRaw, candidateRaw)
+        if (!persistenceResult || !persistenceResult.success) {
+            return root.operationResult(false, "persist-failed", appName)
+        }
+        root.dockItems = update.items
+        if (root.runtimeService) {
+            root.runtimeService.persistDockItemsJson(candidateRaw, root.configInstanceId())
+        }
+        root.configurationChanged()
 
+        const resolved = applications[applications.length - 1]
         root.recentlyTransitionedAppId = root.taskController
             ? root.taskController.normalizeApplicationId(
                 resolved.appId || resolved.storageId || "")
@@ -1327,8 +1336,16 @@ Item {
                 "applications:" + String(resolved.storageId || ""))
             : String(resolved.launcherUrl || "")
         itemTransitionTimer.restart()
-        return root.operationResult(true,
-            existingIndex >= 0 ? "moved" : "pinned", appName)
+        if (update.count > 1) {
+            // qmllint disable unqualified
+            return {
+                "success": true, "status": "pinned",
+                "message": i18np("%1 application was placed on the Dock.",
+                    "%1 applications were placed on the Dock.", update.count)
+            }
+            // qmllint enable unqualified
+        }
+        return root.operationResult(true, update.moved ? "moved" : "pinned", appName)
     }
 
     function pinApplicationLauncherAt(urls, targetIndex) {
@@ -1337,7 +1354,8 @@ Item {
             return root.operationResult(false,
                 validation.errorCode || "invalid-source", "")
         }
-        return root.pinAppToDockAt(validation.storageId, targetIndex)
+        const applications = validation.applications || [validation]
+        return root.pinApplicationsToDockAt(applications, targetIndex)
     }
 
     function addApplicationLauncherToContainer(urls, targetIndex,
@@ -1370,7 +1388,8 @@ Item {
             root.dockItems, index, validation)
         if (!update.changed) {
             return root.containerApplicationDropResult(false,
-                update.status, appName, containerName, update.container)
+                update.status, appName, containerName, update.container,
+                update.applicationCount || 1)
         }
         if (!root.persistenceAdapter
                 || typeof root.persistenceAdapter.commitDockItemsJson
@@ -1407,8 +1426,9 @@ Item {
                 candidateRaw, root.configInstanceId())
         }
         root.configurationChanged()
-        return root.containerApplicationDropResult(true, "added", appName,
-            containerName, update.container)
+        return root.containerApplicationDropResult(true, "added",
+            update.application ? update.application.name : appName,
+            containerName, update.container, update.addedCount || 1)
     }
 
     function pinAppToDesktop(storageId, command) {

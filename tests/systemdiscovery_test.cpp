@@ -189,10 +189,12 @@ bool validateApplicationLauncherDrops(SystemDiscovery &discovery)
 
     const QList<QVariantList> rejectedDrops = {
         {},
-        {QUrl::fromLocalFile(launcherPath), QUrl::fromLocalFile(launcherPath)},
         {QUrl(QStringLiteral("https://example.invalid/drop.desktop"))},
         {QUrl::fromLocalFile(textPath)},
         {QUrl(QStringLiteral("file:///tmp/drop.desktop?action=run"))},
+        {QUrl::fromLocalFile(launcherPath), QUrl::fromLocalFile(textPath)},
+        {QUrl::fromLocalFile(launcherPath),
+            QUrl(QStringLiteral("https://example.invalid/drop.desktop"))},
     };
     for (const QVariantList &drop : rejectedDrops) {
         if (discovery.validateApplicationLauncherDrop(drop)
@@ -200,6 +202,49 @@ bool validateApplicationLauncherDrops(SystemDiscovery &discovery)
             std::cerr << "An unsafe launcher drop was accepted.\n";
             return false;
         }
+        if (discovery.validateApplicationLauncherDrop(drop)
+                .contains(QStringLiteral("applications"))) {
+            std::cerr << "A rejected launcher batch exposed partial results.\n";
+            return false;
+        }
+    }
+
+    const QVariantMap duplicates = discovery.validateApplicationLauncherDrop({
+        QUrl::fromLocalFile(launcherPath), QUrl::fromLocalFile(launcherLink),
+        QUrl::fromLocalFile(launcherPath)});
+    if (!duplicates.value(QStringLiteral("accepted")).toBool()
+        || duplicates.value(QStringLiteral("applications")).toList().size() != 1) {
+        std::cerr << "Repeated launcher identities were not deduplicated.\n";
+        return false;
+    }
+
+    QVariantList batch;
+    for (int index = 0; index < 64; ++index) {
+        const QString path = directory.filePath(QStringLiteral("batch-%1.desktop").arg(index));
+        if (!writeFile(path, desktopContents, true)) {
+            std::cerr << "Could not create a launcher batch fixture.\n";
+            return false;
+        }
+        batch.append(QUrl::fromLocalFile(path));
+    }
+    const QVariantMap maximumBatch = discovery.validateApplicationLauncherDrop(batch);
+    const QVariantList applications = maximumBatch.value(QStringLiteral("applications")).toList();
+    if (!maximumBatch.value(QStringLiteral("accepted")).toBool() || applications.size() != 64) {
+        std::cerr << "A valid maximum-size launcher batch was rejected.\n";
+        return false;
+    }
+    for (int index = 0; index < applications.size(); ++index) {
+        if (applications[index].toMap().value(QStringLiteral("launcherUrl")).toUrl()
+            != batch[index].toUrl()) {
+            std::cerr << "Launcher batch order changed.\n";
+            return false;
+        }
+    }
+    batch.append(QUrl::fromLocalFile(launcherPath));
+    if (discovery.validateApplicationLauncherDrop(batch)
+            .value(QStringLiteral("accepted")).toBool()) {
+        std::cerr << "An oversized launcher batch was accepted.\n";
+        return false;
     }
     return true;
 }

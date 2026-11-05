@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Arrastre de lanzadores
+
+- Suelta varios lanzadores .desktop en el dock o en un contenedor manual de aplicaciones. Se valida todo el lote antes de guardarlo; los duplicados no se añaden dos veces.
+
 ### Filtros de tareas
 
 - Añadidos tres interruptores independientes en Ventanas para combinar filtros por escritorio virtual actual, actividad actual y pantalla del dock. Los filtros activados se aplican conjuntamente; al desactivar uno se incluyen todas las ubicaciones de esa categoría.

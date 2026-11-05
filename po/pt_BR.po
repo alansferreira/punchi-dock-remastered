@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Punchi Dock Remastered 0.9.7.78\n"
 "Report-Msgid-Bugs-To: https://github.com/PunchiSoft/punchi-dock-remastered/"
 "issues\n"
-"POT-Creation-Date: 2026-11-05 00:14-0300\n"
+"POT-Creation-Date: 2026-11-05 01:26-0300\n"
 "PO-Revision-Date: 2026-08-26 23:00-0400\n"
 "Last-Translator: Punchi Dock Contributors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -154,6 +154,19 @@ msgid_plural "%1 applications"
 msgstr[0] "%1 aplicativo"
 msgstr[1] "%1 aplicativos"
 
+#: contents/ui/components/DockItemsController.qml:1163
+#: contents/ui/config/ConfigItems.qml:734
+msgid "%1 application was added to %2."
+msgid_plural "%1 applications were added to %2."
+msgstr[0] "%1 aplicativo foi adicionado a %2."
+msgstr[1] "%1 aplicativos foram adicionados a %2."
+
+#: contents/ui/components/DockItemsController.qml:1343
+msgid "%1 application was placed on the Dock."
+msgid_plural "%1 applications were placed on the Dock."
+msgstr[0] "%1 aplicativo foi colocado no Dock."
+msgstr[1] "%1 aplicativos foram colocados no Dock."
+
 #: contents/ui/components/punchimenu/PunchiMenuNormalSettingsView.qml:255
 msgid "%1 character"
 msgid_plural "%1 characters"
@@ -166,8 +179,8 @@ msgid_plural "%1 devices connected"
 msgstr[0] "%1 dispositivo conectado"
 msgstr[1] "%1 dispositivos conectados"
 
-#: contents/ui/components/DockItemsController.qml:1166
-#: contents/ui/config/ConfigItems.qml:736
+#: contents/ui/components/DockItemsController.qml:1172
+#: contents/ui/config/ConfigItems.qml:746
 msgctxt "@info:status"
 msgid "%1 is already in %2."
 msgstr "%1 já está em %2."
@@ -177,18 +190,18 @@ msgctxt "@info:media"
 msgid "%1 is not running"
 msgstr "%1 não está em execução"
 
-#: contents/ui/components/DockItem.qml:1641
+#: contents/ui/components/DockItem.qml:1648
 msgctxt "@info:accessible"
 msgid "%1 is now in front; release to open the local files"
 msgstr "%1 está agora em primeiro plano; solte para abrir os arquivos locais"
 
-#: contents/ui/components/DockItem.qml:1665
+#: contents/ui/components/DockItem.qml:1672
 msgctxt "@info:accessible"
 msgid "%1 is updated automatically and cannot accept applications"
 msgstr "%1 é atualizado automaticamente e não pode aceitar aplicativos"
 
-#: contents/ui/components/DockItemsController.qml:1171
-#: contents/ui/config/ConfigItems.qml:741
+#: contents/ui/components/DockItemsController.qml:1177
+#: contents/ui/config/ConfigItems.qml:751
 msgctxt "@info:status"
 msgid ""
 "%1 is updated automatically. Change its content source to Manual before "
@@ -228,7 +241,7 @@ msgid_plural "%1 more in %2"
 msgstr[0] "%1 mais em %2"
 msgstr[1] "%1 mais em %2"
 
-#: contents/ui/main.qml:4013
+#: contents/ui/main.qml:4022
 msgid "%1 more window group"
 msgid_plural "%1 more window groups"
 msgstr[0] "%1 grupo de janelas adicional"
@@ -247,14 +260,14 @@ msgstr "%1 de %2 caracteres"
 msgid "%1 of %2 items"
 msgstr "%1 de %2 itens"
 
-#: contents/ui/components/DockItem.qml:1695
+#: contents/ui/components/DockItem.qml:1702
 #: contents/ui/components/TaskOverflowPopup.qml:111
 msgid "%1 open window"
 msgid_plural "%1 open windows"
 msgstr[0] "%1 janela aberta"
 msgstr[1] "%1 janelas abertas"
 
-#: contents/ui/components/DockItem.qml:1691
+#: contents/ui/components/DockItem.qml:1698
 msgid "%1 open window. Press M to open media controls."
 msgid_plural "%1 open windows. Press M to open media controls."
 msgstr[0] "%1 janela aberta. Pressione M para abrir os controles de mídia."
@@ -278,7 +291,7 @@ msgid "%1 px"
 msgstr "%1px"
 
 #: contents/ui/config/components/ActionDialog.qml:100
-#: contents/ui/config/ConfigItems.qml:1085
+#: contents/ui/config/ConfigItems.qml:1096
 #: contents/ui/config/ItemActionEditor.qml:55
 #: contents/ui/config/ItemActionEditor.qml:180
 #: contents/ui/config/ItemConfigurationDialog.qml:803
@@ -297,8 +310,8 @@ msgid_plural "%1 unread notifications"
 msgstr[0] "%1 notificação não lida"
 msgstr[1] "%1 notificações não lidas"
 
-#: contents/ui/components/DockItemsController.qml:1162
-#: contents/ui/config/ConfigItems.qml:732
+#: contents/ui/components/DockItemsController.qml:1166
+#: contents/ui/config/ConfigItems.qml:738
 msgctxt "@info:status"
 msgid "%1 was added to %2."
 msgstr "%1 foi adicionado a %2."
@@ -728,17 +741,17 @@ msgctxt "@info:status"
 msgid "A file location is too long to open safely."
 msgstr "O local de um arquivo é longo demais para ser aberto com segurança."
 
-#: contents/ui/config/ConfigItems.qml:1088
+#: contents/ui/config/ConfigItems.qml:1099
 #: contents/ui/config/ItemConfigurationDialog.qml:806
 msgid "Action command:"
 msgstr "Comando de ação:"
 
-#: contents/ui/config/ConfigItems.qml:1087
+#: contents/ui/config/ConfigItems.qml:1098
 #: contents/ui/config/ItemConfigurationDialog.qml:805
 msgid "Action icon:"
 msgstr "Ícone de ação:"
 
-#: contents/ui/config/ConfigItems.qml:1086
+#: contents/ui/config/ConfigItems.qml:1097
 #: contents/ui/config/ItemConfigurationDialog.qml:804
 msgid "Action name:"
 msgstr "Nome da ação:"
@@ -793,13 +806,13 @@ msgstr "Adicionar separador"
 msgid "Add a visual separator"
 msgstr "Adicione um separador visual"
 
-#: contents/ui/config/ConfigItems.qml:1091
+#: contents/ui/config/ConfigItems.qml:1102
 #: contents/ui/config/ItemConfigurationDialog.qml:812
 msgctxt "@action:button"
 msgid "Add action"
 msgstr "Adicionar ação"
 
-#: contents/ui/config/ConfigItems.qml:1090
+#: contents/ui/config/ConfigItems.qml:1101
 #: contents/ui/config/ItemConfigurationDialog.qml:811
 msgctxt "@action:button"
 msgid "Add application"
@@ -930,7 +943,7 @@ msgstr "Ajusta o espaçamento entre os ícones do dock de 0 a 24 pixels."
 msgid "Adjusts the window preview scale between 100 and 300 percent."
 msgstr "Ajusta a escala da visualização da janela entre 100 e 300 por cento."
 
-#: contents/ui/config/ConfigItems.qml:1053
+#: contents/ui/config/ConfigItems.qml:1064
 msgid "Alias/Quick Search:"
 msgstr "Alias/pesquisa rápida:"
 
@@ -963,8 +976,13 @@ msgstr "Todos os desktops"
 msgid "All desktops"
 msgstr "Todos os desktops"
 
+#: contents/ui/components/DockItemsController.qml:1171
+#: contents/ui/config/ConfigItems.qml:743
+msgid "All dropped applications are already in %1."
+msgstr "Todos os aplicativos soltos já estão em %1."
+
 #: contents/ui/config/ConfigAspect.qml:417
-#: contents/ui/config/ConfigItems.qml:1204
+#: contents/ui/config/ConfigItems.qml:1215
 #: contents/ui/config/SoundFileDialog.qml:9
 msgid "All files"
 msgstr "Todos os arquivos"
@@ -1028,15 +1046,15 @@ msgctxt "@info"
 msgid "Another folder change is still being saved."
 msgstr "Outra alteração de pasta ainda está sendo salva."
 
-#: contents/ui/config/ConfigItems.qml:1088
+#: contents/ui/config/ConfigItems.qml:1099
 msgid "App command:"
 msgstr "Comando do aplicativo:"
 
-#: contents/ui/config/ConfigItems.qml:1087
+#: contents/ui/config/ConfigItems.qml:1098
 msgid "App icon:"
 msgstr "Ícone do aplicativo:"
 
-#: contents/ui/config/ConfigItems.qml:1086
+#: contents/ui/config/ConfigItems.qml:1097
 msgid "App name:"
 msgstr "Nome do aplicativo:"
 
@@ -1061,8 +1079,8 @@ msgstr "Aparência:"
 msgid "Applets only"
 msgstr "Apenas miniaplicativos"
 
-#: contents/ui/components/DockItem.qml:1652
 #: contents/ui/components/DockItem.qml:1659
+#: contents/ui/components/DockItem.qml:1666
 #: contents/ui/components/DockItemsController.qml:1082
 #: contents/ui/components/FolderFanView.qml:846
 #: contents/ui/components/FolderPopup.qml:1139
@@ -1089,7 +1107,7 @@ msgctxt "@info:accessibility"
 msgid "Application audio streams"
 msgstr "Fluxos de áudio de aplicativos"
 
-#: contents/ui/config/ConfigItems.qml:1078
+#: contents/ui/config/ConfigItems.qml:1089
 #: contents/ui/config/ItemConfigurationDialog.qml:705
 msgid "Application category"
 msgstr "Categoria de aplicativo"
@@ -1239,7 +1257,7 @@ msgctxt "@info:accessibility"
 msgid "Audio devices"
 msgstr "Dispositivos de áudio"
 
-#: contents/ui/config/ConfigItems.qml:1203
+#: contents/ui/config/ConfigItems.qml:1214
 #: contents/ui/config/SoundFileDialog.qml:8
 msgid "Audio files"
 msgstr "Arquivos de áudio"
@@ -1624,7 +1642,7 @@ msgid "Category grouping is active; the top category carousel is hidden."
 msgstr ""
 "O agrupamento por categorias está ativo; o carrossel superior fica oculto."
 
-#: contents/ui/config/ConfigItems.qml:1080
+#: contents/ui/config/ConfigItems.qml:1091
 #: contents/ui/config/ItemConfigurationDialog.qml:707
 msgid "Category:"
 msgstr "Categoria:"
@@ -1808,7 +1826,7 @@ msgstr "Escolha a cor do marcador do relógio"
 msgid "Choose custom color"
 msgstr "Escolher cor personalizada"
 
-#: contents/ui/config/ConfigItems.qml:989
+#: contents/ui/config/ConfigItems.qml:1000
 msgid "Choose folder"
 msgstr "Escolha a pasta"
 
@@ -1820,8 +1838,8 @@ msgstr ""
 "Choose how long the media controls stay expanded after interaction. Zero "
 "keeps them expanded."
 
-#: contents/ui/config/ConfigItems.qml:980
-#: contents/ui/config/ConfigItems.qml:1072
+#: contents/ui/config/ConfigItems.qml:991
+#: contents/ui/config/ConfigItems.qml:1083
 #: contents/ui/config/ItemConfigurationDialog.qml:712
 #: contents/ui/config/ItemConfigurationDialog.qml:807
 #: contents/ui/config/TrashOptionsPanel.qml:141
@@ -1839,7 +1857,7 @@ msgstr ""
 "Escolha a ordem manual, a ordem alfabética ou o agrupamento por categorias "
 "de aplicativos do KDE."
 
-#: contents/ui/config/ConfigItems.qml:1201
+#: contents/ui/config/ConfigItems.qml:1212
 #: contents/ui/config/TrashOptionsPanel.qml:259
 #: contents/ui/config/TrashOptionsPanel.qml:262
 msgid "Choose sound"
@@ -1994,7 +2012,7 @@ msgctxt "@item:inlistbox Context menu size"
 msgid "Comfortable"
 msgstr "Confortável"
 
-#: contents/ui/config/ConfigItems.qml:1070
+#: contents/ui/config/ConfigItems.qml:1081
 #: contents/ui/config/ItemConfigurationDialog.qml:710
 msgid "Command:"
 msgstr "Comando:"
@@ -2082,7 +2100,7 @@ msgstr "Configurar relógio"
 msgid "Configure folder"
 msgstr "Configurar pasta"
 
-#: contents/ui/config/ConfigItems.qml:1152
+#: contents/ui/config/ConfigItems.qml:1163
 msgid "Configure media player"
 msgstr "Configurar reprodutor multimídia"
 
@@ -2177,7 +2195,7 @@ msgid "Connection failed"
 msgstr "Falha na conexão"
 
 #: contents/ui/config/code/itemTypeCatalog.js:50
-#: contents/ui/config/ConfigItems.qml:1058
+#: contents/ui/config/ConfigItems.qml:1069
 #: contents/ui/config/ItemConfigurationDialog.qml:691
 msgid "Container"
 msgstr "Recipiente"
@@ -2202,7 +2220,7 @@ msgctxt "@label:listbox"
 msgid "Container view:"
 msgstr "Visualização do recipiente:"
 
-#: contents/ui/config/ConfigItems.qml:1074
+#: contents/ui/config/ConfigItems.qml:1085
 #: contents/ui/config/ItemConfigurationDialog.qml:799
 msgid "Content"
 msgstr "Conteúdo"
@@ -2217,7 +2235,7 @@ msgctxt "@title:menu Folder content submenu, %1 is the folder name"
 msgid "Content — %1"
 msgstr "Conteúdo — %1"
 
-#: contents/ui/config/ConfigItems.qml:1075
+#: contents/ui/config/ConfigItems.qml:1086
 #: contents/ui/config/ItemConfigurationDialog.qml:702
 msgid "Content:"
 msgstr "Conteúdo:"
@@ -2470,7 +2488,7 @@ msgstr "Excluir esta nota do dock? Seu conteúdo não pode ser recuperado."
 msgid "Dependency check"
 msgstr "Verificação de dependências"
 
-#: contents/ui/config/ConfigItems.qml:1054
+#: contents/ui/config/ConfigItems.qml:1065
 #: contents/ui/config/ItemConfigurationDialog.qml:688
 msgid "Description:"
 msgstr "Descrição:"
@@ -2483,7 +2501,7 @@ msgstr "Área de Trabalho %1"
 msgid "Desktop visibility:"
 msgstr "Visibilidade da área de trabalho:"
 
-#: contents/ui/config/ConfigItems.qml:1062
+#: contents/ui/config/ConfigItems.qml:1073
 #: contents/ui/config/ItemConfigurationDialog.qml:695
 msgid "Detailed"
 msgstr "Detalhado"
@@ -2709,7 +2727,7 @@ msgstr "Double line"
 msgid "Drag files"
 msgstr "Arrastar arquivos"
 
-#: contents/ui/components/DockItem.qml:1634
+#: contents/ui/components/DockItem.qml:1641
 msgctxt "@info:accessible"
 msgid ""
 "Drag to move the open applications section. Use an arrow key to move it one "
@@ -2718,7 +2736,7 @@ msgstr ""
 "Arraste para mover a seção de aplicativos abertos. Use uma tecla de seta "
 "para movê-la uma posição ou Escape para cancelar."
 
-#: contents/ui/components/DockItem.qml:1681
+#: contents/ui/components/DockItem.qml:1688
 msgctxt "@info:accessible"
 msgid ""
 "Drag to move this Dock item. Use Control+Shift with an arrow key to move it "
@@ -2732,7 +2750,7 @@ msgctxt "@info:status Bluetooth device type"
 msgid "Drawing tablet"
 msgstr "Mesa digitalizadora"
 
-#: contents/ui/config/ConfigItems.qml:1089
+#: contents/ui/config/ConfigItems.qml:1100
 #: contents/ui/config/ItemConfigurationDialog.qml:809
 msgctxt "@info:placeholder"
 msgid "Drop applications here"
@@ -2853,7 +2871,7 @@ msgstr "Permitir arrastar e soltar arquivos nos ícones de aplicativos"
 msgid "Enable middle-click actions"
 msgstr "Ativar ações do botão do meio"
 
-#: contents/ui/config/ConfigItems.qml:1082
+#: contents/ui/config/ConfigItems.qml:1093
 #: contents/ui/config/ItemConfigurationDialog.qml:800
 msgid "Enable right-click menu"
 msgstr "Habilitar menu do botão direito"
@@ -3080,14 +3098,14 @@ msgstr "Falha ao ler o arquivo."
 #: contents/ui/config/components/ActionDialog.qml:80
 #: contents/ui/config/components/RecentApplicationsSettings.qml:28
 #: contents/ui/config/ConfigFolderPopups.qml:116
-#: contents/ui/config/ConfigItems.qml:1063
+#: contents/ui/config/ConfigItems.qml:1074
 #: contents/ui/config/ItemConfigurationDialog.qml:696
 #: contents/ui/config/ItemEditorPanel.qml:73
 msgctxt "@item:inlistbox Folder popup layout"
 msgid "Fan"
 msgstr "Leque"
 
-#: contents/ui/config/ConfigItems.qml:1065
+#: contents/ui/config/ConfigItems.qml:1076
 #: contents/ui/config/ItemConfigurationDialog.qml:698
 msgid "Fan is only available in horizontal docks."
 msgstr "O leque só está disponível em docks horizontais."
@@ -3162,7 +3180,7 @@ msgid "Flow to the right"
 msgstr "Fluir para a direita"
 
 #: contents/ui/components/FolderPopup.qml:794
-#: contents/ui/config/ConfigItems.qml:1077
+#: contents/ui/config/ConfigItems.qml:1088
 #: contents/ui/config/ItemConfigurationDialog.qml:704
 msgid "Folder"
 msgstr "Pasta"
@@ -3250,7 +3268,7 @@ msgctxt "@title:menu"
 msgid "Folder view"
 msgstr "Visualização da pasta"
 
-#: contents/ui/config/ConfigItems.qml:1079
+#: contents/ui/config/ConfigItems.qml:1090
 #: contents/ui/config/ItemConfigurationDialog.qml:706
 msgid "Folder:"
 msgstr "Pasta:"
@@ -3419,7 +3437,7 @@ msgctxt "@title:category"
 msgid "Graphics"
 msgstr "Gráficos"
 
-#: contents/ui/config/ConfigItems.qml:1060
+#: contents/ui/config/ConfigItems.qml:1071
 #: contents/ui/config/ItemConfigurationDialog.qml:693
 msgid "Grid"
 msgstr "Grade"
@@ -3579,7 +3597,7 @@ msgstr "Espaçamento dos ícones"
 msgid "Icon spacing:"
 msgstr "Espaçamento dos ícones:"
 
-#: contents/ui/config/ConfigItems.qml:1069
+#: contents/ui/config/ConfigItems.qml:1080
 #: contents/ui/config/ItemConfigurationDialog.qml:709
 #: contents/ui/config/PunchiMenuOptionsPanel.qml:123
 msgid "Icon:"
@@ -3834,7 +3852,7 @@ msgctxt "@action:button"
 msgid "Keep editing"
 msgstr "Continuar editando"
 
-#: contents/ui/components/DockItem.qml:1637
+#: contents/ui/components/DockItem.qml:1644
 msgctxt "@info:accessible"
 msgid "Keep holding to bring %1 to the front"
 msgstr "Continue segurando para trazer %1 para o primeiro plano"
@@ -3882,7 +3900,7 @@ msgctxt "@info:short description of the application item type"
 msgid "Launch an application"
 msgstr "Abrir um aplicativo"
 
-#: contents/ui/config/ConfigItems.qml:1057
+#: contents/ui/config/ConfigItems.qml:1068
 #: contents/ui/config/ItemConfigurationDialog.qml:690
 msgid "Launch app"
 msgstr "Iniciar aplicativo"
@@ -3920,7 +3938,7 @@ msgctxt "@action:button"
 msgid "Light and dark mode"
 msgstr "Modo claro e escuro"
 
-#: contents/ui/config/ConfigItems.qml:1083
+#: contents/ui/config/ConfigItems.qml:1094
 #: contents/ui/config/ItemConfigurationDialog.qml:801
 msgid "Limit menu rows"
 msgstr "Limitar linhas do menu"
@@ -3959,7 +3977,7 @@ msgstr ""
 "Linha, ponto, anel pequeno e quadrado arredondado podem ser colocados na "
 "borda superior ou inferior do ícone."
 
-#: contents/ui/config/ConfigItems.qml:1061
+#: contents/ui/config/ConfigItems.qml:1072
 #: contents/ui/config/ItemConfigurationDialog.qml:694
 msgid "List"
 msgstr "Vista simples"
@@ -3971,7 +3989,7 @@ msgctxt "@item:inlistbox Folder popup layout"
 msgid "List"
 msgstr "Vista simples"
 
-#: contents/ui/config/ConfigItems.qml:1081
+#: contents/ui/config/ConfigItems.qml:1092
 #: contents/ui/config/ItemConfigurationDialog.qml:708
 msgid "Load content"
 msgstr "Carregar conteúdo"
@@ -4068,7 +4086,7 @@ msgstr "Gerenciar atualizações do sistema"
 msgid "Manage themes:"
 msgstr "Gerenciar temas:"
 
-#: contents/ui/config/ConfigItems.qml:1076
+#: contents/ui/config/ConfigItems.qml:1087
 #: contents/ui/config/ItemConfigurationDialog.qml:703
 msgid "Manual"
 msgstr "Manuais"
@@ -4396,7 +4414,7 @@ msgstr "Mover para uma pasta"
 msgid "Move “%1” to the Trash…"
 msgstr "Mover “%1” para a Lixeira…"
 
-#: contents/ui/components/DockItem.qml:1675
+#: contents/ui/components/DockItem.qml:1682
 msgctxt "@info:accessible"
 msgid "Moving Dock item. Drop to place it at position %1 of %2."
 msgstr "Movendo um item do Dock. Solte para colocá-lo na posição %1 de %2."
@@ -4436,7 +4454,7 @@ msgctxt "@item:inmenu folder sort mode"
 msgid "Name"
 msgstr "Nome"
 
-#: contents/ui/config/ConfigItems.qml:1052
+#: contents/ui/config/ConfigItems.qml:1063
 #: contents/ui/config/ItemConfigurationDialog.qml:685
 #: contents/ui/config/TimedOptionsPanel.qml:137
 #: contents/ui/config/TrashOptionsPanel.qml:64
@@ -4680,7 +4698,7 @@ msgstr "Não selecionado para a nova pasta"
 
 #: contents/ui/components/NotePopup.qml:133
 #: contents/ui/config/code/itemTypeCatalog.js:55
-#: contents/ui/config/ConfigItems.qml:1066
+#: contents/ui/config/ConfigItems.qml:1077
 #: contents/ui/config/ItemConfigurationDialog.qml:699
 msgid "Note"
 msgstr "Nota"
@@ -5316,7 +5334,7 @@ msgstr "Apresentação:"
 msgid "Press"
 msgstr "Clicar"
 
-#: contents/ui/components/DockItem.qml:1699
+#: contents/ui/components/DockItem.qml:1706
 msgctxt "@info:accessible"
 msgid "Press M to open media controls"
 msgstr "Pressione M para abrir os controles de mídia"
@@ -5475,7 +5493,7 @@ msgid "PunchiMenu panel distance"
 msgstr "Distância do PunchiMenu ao painel"
 
 #: contents/ui/components/DockItem.qml:42
-#: contents/ui/components/DockItemsController.qml:1465
+#: contents/ui/components/DockItemsController.qml:1485
 msgctxt "@title"
 msgid "Quick Note"
 msgstr "Nota rápida"
@@ -5546,17 +5564,17 @@ msgstr "Opacidade de reflexão:"
 msgid "Reflection:"
 msgstr "Reflexão:"
 
-#: contents/ui/components/DockItem.qml:1656
+#: contents/ui/components/DockItem.qml:1663
 msgctxt "@info:accessible"
 msgid "Release to add %1 to %2"
 msgstr "Solte para adicionar %1 a %2"
 
-#: contents/ui/components/DockItem.qml:1649
+#: contents/ui/components/DockItem.qml:1656
 msgctxt "@info:accessible"
 msgid "Release to insert %1 in the Dock"
 msgstr "Solte para inserir %1 no Dock"
 
-#: contents/ui/components/DockItem.qml:1645
+#: contents/ui/components/DockItem.qml:1652
 msgctxt "@info:accessible"
 msgid "Release to open local files with %1"
 msgstr "Solte para abrir arquivos locais com %1"
@@ -5571,7 +5589,7 @@ msgctxt "@action:button"
 msgid "Remove"
 msgstr "Retirar"
 
-#: contents/ui/config/ConfigItems.qml:1008
+#: contents/ui/config/ConfigItems.qml:1019
 msgid "Remove and disable"
 msgstr "Remover e desativar"
 
@@ -5604,7 +5622,7 @@ msgctxt "@title"
 msgid "Remove from folder"
 msgstr "Remover da pasta"
 
-#: contents/ui/config/ConfigItems.qml:998
+#: contents/ui/config/ConfigItems.qml:1009
 msgid "Remove open applications from the dock?"
 msgstr "Remover os aplicativos abertos do Dock?"
 
@@ -5621,7 +5639,7 @@ msgstr ""
 "Remover %1 dissolverá esta pasta com dois aplicativos. Ambos os aplicativos "
 "retornarão à lista principal e nenhum aplicativo será excluído."
 
-#: contents/ui/config/ConfigItems.qml:1015
+#: contents/ui/config/ConfigItems.qml:1026
 msgid ""
 "Removing this item will also disable Show active windows in the dock. You "
 "can enable it again from the Windows settings."
@@ -5774,7 +5792,7 @@ msgctxt "@option:close-button-position"
 msgid "Right"
 msgstr "Direita"
 
-#: contents/ui/config/ConfigItems.qml:1073
+#: contents/ui/config/ConfigItems.qml:1084
 #: contents/ui/config/ItemConfigurationDialog.qml:798
 msgid "Right-click commands"
 msgstr "Comandos de clique com o botão direito"
@@ -5929,7 +5947,7 @@ msgid "Selected package: %s\\n"
 msgstr "Pacote selecionado: %s\\n"
 
 #: contents/ui/config/code/itemTypeCatalog.js:59
-#: contents/ui/config/ConfigItems.qml:1067
+#: contents/ui/config/ConfigItems.qml:1078
 #: contents/ui/config/ItemConfigurationDialog.qml:700
 msgid "Separator"
 msgstr "Separador"
@@ -6259,12 +6277,12 @@ msgid "Sound Volume"
 msgstr "Volume do som"
 
 #: contents/ui/config/code/itemTypeCatalog.js:63
-#: contents/ui/config/ConfigItems.qml:1068
+#: contents/ui/config/ConfigItems.qml:1079
 #: contents/ui/config/ItemConfigurationDialog.qml:701
 msgid "Spacer"
 msgstr "Espaçador"
 
-#: contents/ui/config/ConfigItems.qml:1071
+#: contents/ui/config/ConfigItems.qml:1082
 #: contents/ui/config/ItemConfigurationDialog.qml:711
 msgid "Spacer size:"
 msgstr "Tamanho do espaçador:"
@@ -6383,7 +6401,7 @@ msgid "Text shadows:"
 msgstr "Sombras de texto:"
 
 #: contents/ui/components/DockItemsController.qml:1130
-#: contents/ui/components/DockItemsController.qml:1184
+#: contents/ui/components/DockItemsController.qml:1190
 msgctxt "@info:status"
 msgid "The Dock configuration could not be saved."
 msgstr "A configuração do Dock não pôde ser salva."
@@ -6396,16 +6414,16 @@ msgstr ""
 "A quantidade se aplica aos rótulos dos pop-ups de pastas. Zero remove a "
 "sombra por completo, então o texto mantém apenas a superfície atrás de si."
 
-#: src/systemdiscovery.cpp:1149
+#: src/systemdiscovery.cpp:1153
 msgid "The application action could not be found."
 msgstr "A ação do aplicativo não foi encontrada."
 
-#: contents/ui/components/DockItemsController.qml:1188
+#: contents/ui/components/DockItemsController.qml:1194
 msgctxt "@info:status"
 msgid "The application could not be added to the container."
 msgstr "Não foi possível adicionar o aplicativo ao contêiner."
 
-#: src/systemdiscovery.cpp:1040
+#: src/systemdiscovery.cpp:1044
 msgid "The application could not be found."
 msgstr "O aplicativo não foi encontrado."
 
@@ -6529,8 +6547,8 @@ msgctxt "@info:status"
 msgid "The dropped files could not be opened."
 msgstr "Os arquivos soltos não puderam ser abertos."
 
-#: contents/ui/components/DockItemsController.qml:1176
-#: contents/ui/config/ConfigItems.qml:749
+#: contents/ui/components/DockItemsController.qml:1182
+#: contents/ui/config/ConfigItems.qml:759
 msgctxt "@info:status"
 msgid "The dropped launcher could not be resolved safely."
 msgstr "Não foi possível resolver com segurança o lançador arrastado."
@@ -6560,7 +6578,7 @@ msgctxt "@info"
 msgid "The folder change could not be applied. Please try again."
 msgstr "Não foi possível aplicar a alteração da pasta. Tente novamente."
 
-#: src/systemdiscovery.cpp:572 src/systemdiscovery.cpp:1300
+#: src/systemdiscovery.cpp:572 src/systemdiscovery.cpp:1304
 msgid "The folder location is invalid."
 msgstr "O local da pasta é inválido."
 
@@ -6574,7 +6592,7 @@ msgctxt "@info:status"
 msgid "The last folder change could not be undone."
 msgstr "Não foi possível desfazer a última alteração da pasta."
 
-#: src/systemdiscovery.cpp:1170
+#: src/systemdiscovery.cpp:1174
 msgid "The menu editor could not be found."
 msgstr "Não foi possível encontrar o editor de menus."
 
@@ -6690,8 +6708,8 @@ msgstr "O som não pôde ser reproduzido: %1"
 msgid "The spectrum is drawn over the Plasma-themed dock background."
 msgstr "O espectro é desenhado sobre o fundo da doca com tema Plasma."
 
-#: contents/ui/components/DockItemsController.qml:1180
-#: contents/ui/config/ConfigItems.qml:746
+#: contents/ui/components/DockItemsController.qml:1186
+#: contents/ui/config/ConfigItems.qml:756
 msgctxt "@info:status"
 msgid "The target container changed before the application could be added."
 msgstr ""
@@ -6745,7 +6763,7 @@ msgctxt "@info:status"
 msgid "This application could not be resolved safely."
 msgstr "Este aplicativo não pôde ser resolvido com segurança."
 
-#: contents/ui/components/DockItem.qml:1669
+#: contents/ui/components/DockItem.qml:1676
 msgctxt "@info:accessible"
 msgid "This file drop cannot be accepted"
 msgstr "Este arrastar e soltar de arquivos não pode ser aceito"
@@ -6912,12 +6930,12 @@ msgctxt "@item:inmenu folder sort mode"
 msgid "Type"
 msgstr "Tipo"
 
-#: contents/ui/config/ConfigItems.qml:1055
+#: contents/ui/config/ConfigItems.qml:1066
 #: contents/ui/config/ItemConfigurationDialog.qml:687
 msgid "Type name or alias... then search"
 msgstr "Digite o nome ou alias... depois busque"
 
-#: contents/ui/config/ConfigItems.qml:1056
+#: contents/ui/config/ConfigItems.qml:1067
 #: contents/ui/config/ItemConfigurationDialog.qml:609
 #: contents/ui/config/ItemConfigurationDialog.qml:689
 msgid "Type:"
@@ -7239,7 +7257,7 @@ msgctxt "@action:button %1 is an audio device name"
 msgid "Use %1 as the default device"
 msgstr "Usar %1 como dispositivo padrão"
 
-#: contents/ui/components/DockItem.qml:1685
+#: contents/ui/components/DockItem.qml:1692
 msgctxt "@info:accessible"
 msgid "Use Control+Shift with an arrow key to move this Dock item."
 msgstr "Use Ctrl+Shift com uma tecla de seta para mover este item do dock."
@@ -7307,7 +7325,7 @@ msgstr "Versão %s | %s | %s"
 msgid "Vertical"
 msgstr "Verticais"
 
-#: contents/ui/config/ConfigItems.qml:1059
+#: contents/ui/config/ConfigItems.qml:1070
 #: contents/ui/config/ItemConfigurationDialog.qml:692
 msgid "View:"
 msgstr "Ver:"
@@ -7579,7 +7597,7 @@ msgid "pacman is required on Arch-family distributions"
 msgstr "o pacman é obrigatório em distribuições da família Arch"
 
 #: contents/ui/config/components/ActionDialog.qml:99
-#: contents/ui/config/ConfigItems.qml:1084
+#: contents/ui/config/ConfigItems.qml:1095
 #: contents/ui/config/ItemActionEditor.qml:54
 #: contents/ui/config/ItemConfigurationDialog.qml:802
 msgid "rows"

@@ -45,6 +45,9 @@ als in Entwicklung gekennzeichnete Funktionen können in der neuesten Veröffent
   für geöffnete Anwendungen an.
 - **Fenstersteuerung:** Nutze gruppierte Fenster, Anwendungsaktionen,
   Fensteranzahl-Anzeigen und konfigurierbare Karten oder Live-Vorschaubilder.
+- **Starter per Drag-and-drop:** Ziehe mehrere .desktop-Starter auf das Dock oder
+  in einen manuellen Anwendungscontainer. Der gesamte Stapel wird vor dem
+  Speichern geprüft; Duplikate werden nicht zweimal hinzugefügt.
 - **Aufgabenfilter:** Kombiniere in den Fenstereinstellungen unabhängige Filter
   für die aktuelle virtuelle Arbeitsfläche, die aktuelle Aktivität und den
   Bildschirm des Docks. Schalte einen Filter aus, um alle Arbeitsflächen,

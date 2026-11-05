@@ -46,6 +46,9 @@ recursos marcados como em desenvolvimento podem não estar incluídos na versão
 - **Controles de janelas:** Trabalhe com janelas agrupadas, ações de aplicativos,
   indicadores de quantidade de janelas e cartões configuráveis ou miniaturas de
   janelas ao vivo.
+- **Arrastar e soltar lançadores:** Solte vários lançadores .desktop no dock ou em
+  um contêiner manual de aplicativos. O lote inteiro é validado antes de salvar;
+  os duplicados não são adicionados duas vezes.
 - **Filtros de tarefas:** Nas configurações de Janelas, combine filtros
   independentes para a área de trabalho virtual atual, a Activity atual e o
   monitor do dock. Desative um filtro para incluir todas as áreas de trabalho,

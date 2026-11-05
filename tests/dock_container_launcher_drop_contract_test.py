@@ -147,5 +147,13 @@ require(
     and "validateExternalDrop" not in DOCK_ITEM,
     "Ordinary file drops must not restore the obsolete prevalidation bridge.",
 )
+require(
+    "urls.length === 1" not in DOCK_ITEM
+    and "dockItemContainer.mayContainApplicationLauncher(event)" in DOCK_ITEM
+    and "function pinApplicationsToDockAt(" in DOCK_CONTROLLER
+    and "ConfigItemsJS.placeApplicationsOnDock(" in DOCK_CONTROLLER
+    and "root.handleApplicationLauncherDrop(" in MAIN,
+    "Launcher batches must be recognized, committed atomically, and report dock failures.",
+)
 
 print("Dock container launcher drop contract: PASS")

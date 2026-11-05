@@ -44,6 +44,9 @@ features marked as development may not be included in the latest release.
   or terminal commands, reorder items, and display an optional running-app section.
 - **Window controls:** Work with grouped windows, application actions, window-count
   badges, and configurable cards or live window thumbnails.
+- **Launcher drag and drop:** Drop multiple .desktop launchers onto the dock or a
+  manual application container. The whole batch is validated before saving;
+  duplicates are not added twice.
 - **Task filters:** In Windows settings, combine independent filters for the
   current virtual desktop, current Activity, and the dock's screen. Turn a filter
   off to include all desktops, Activities, or screens for that category.

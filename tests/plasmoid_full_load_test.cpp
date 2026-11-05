@@ -20,6 +20,8 @@
 #include <QQuickWindow>
 #include <QSet>
 #include <QTest>
+#include <QTemporaryDir>
+#include <QJsonDocument>
 
 #include <KPluginMetaData>
 #include <KConfigPropertyMap>
@@ -225,6 +227,7 @@ struct LoadResult {
     bool initialIconSizeCorrect = false;
     bool initialFolderPopupDefaultsCorrect = false;
     bool dockItemsControllerAvailable = false;
+    bool launcherBatchAtomic = false;
     bool dynamicMoveBridgeAvailable = false;
     bool dynamicMoveRequestAccepted = false;
     bool dynamicMoveModeActivated = false;
@@ -353,6 +356,8 @@ private Q_SLOTS:
             QVERIFY2(result.initialFolderPopupDefaultsCorrect,
                      "The initial folder popup visual defaults were incorrect");
             QVERIFY2(result.dockItemsControllerAvailable, "The dock items controller is unavailable");
+            QVERIFY2(result.launcherBatchAtomic,
+                     "Launcher batches did not preserve order, deduplication or atomic persistence");
             QVERIFY2(result.dockItemCount > 0, "A clean first run did not load the default dock items");
             QVERIFY2(result.dynamicMoveBridgeAvailable,
                      "The open-applications move bridge is unavailable");
@@ -410,6 +415,109 @@ private Q_SLOTS:
     }
 
 private:
+    bool exerciseLauncherBatch(QObject *controller, Plasma::Applet *applet)
+    {
+        QTemporaryDir directory;
+        if (!directory.isValid()) {
+            return false;
+        }
+        QVariantList urls;
+        for (const QString &name : {QStringLiteral("first"), QStringLiteral("second")}) {
+            const QString path = directory.filePath(name + QStringLiteral(".desktop"));
+            if (!writeFile(path, QByteArrayLiteral(
+                    "[Desktop Entry]\nType=Application\nName=Batch test\n"
+                    "Icon=system-run\nExec=/bin/true\nTryExec=/bin/true\n"))
+                || !QFile::setPermissions(path,
+                    QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner)) {
+                return false;
+            }
+            urls.append(QUrl::fromLocalFile(path));
+        }
+        auto pin = [controller](const QVariantList &values) {
+            QVariant result;
+            if (!QMetaObject::invokeMethod(controller, "pinApplicationLauncherAt",
+                    Q_RETURN_ARG(QVariant, result), Q_ARG(QVariant, values),
+                    Q_ARG(QVariant, 0))) {
+                return QVariantMap();
+            }
+            return result.value<QJSValue>().isObject()
+                ? result.value<QJSValue>().toVariant().toMap() : result.toMap();
+        };
+        auto *configuration = applet->configuration();
+        const QString before = configuration->value(QStringLiteral("dockItemsJson")).toString();
+        QVariantList invalid = urls;
+        invalid.append(QUrl::fromLocalFile(directory.filePath(QStringLiteral("missing.desktop"))));
+        if (pin(invalid).value(QStringLiteral("success")).toBool()
+            || configuration->value(QStringLiteral("dockItemsJson")).toString() != before) {
+            return false;
+        }
+        urls.append(urls.constFirst());
+        const QVariantMap accepted = pin(urls);
+        const QString after = configuration->value(QStringLiteral("dockItemsJson")).toString();
+        const QVariantList items = QJsonDocument::fromJson(after.toUtf8()).toVariant().toList();
+        if (!accepted.value(QStringLiteral("success")).toBool() || items.size() < 2
+            || items[0].toMap().value(QStringLiteral("launcherUrl")).toUrl() != urls[0].toUrl()
+            || items[1].toMap().value(QStringLiteral("launcherUrl")).toUrl() != urls[1].toUrl()) {
+            return false;
+        }
+        const QVariant adapter = controller->property("persistenceAdapter");
+        controller->setProperty("persistenceAdapter", QVariant::fromValue<QObject *>(nullptr));
+        QVariant moved;
+        const bool invoked = QMetaObject::invokeMethod(controller, "pinApplicationLauncherAt",
+            Q_RETURN_ARG(QVariant, moved), Q_ARG(QVariant, urls), Q_ARG(QVariant, items.size()));
+        controller->setProperty("persistenceAdapter", adapter);
+        const QVariantMap rejected = moved.canConvert<QJSValue>()
+            ? moved.value<QJSValue>().toVariant().toMap() : moved.toMap();
+        if (!invoked || rejected.value(QStringLiteral("success")).toBool()
+            || configuration->value(QStringLiteral("dockItemsJson")).toString() != after) {
+            return false;
+        }
+        if (!pin(urls).value(QStringLiteral("success")).toBool()
+            || configuration->value(QStringLiteral("dockItemsJson")).toString() != after) {
+            return false;
+        }
+
+        QVariantMap container{
+            {QStringLiteral("type"), QStringLiteral("folder")},
+            {QStringLiteral("name"), QStringLiteral("Batch container")},
+            {QStringLiteral("sourceType"), QStringLiteral("manual")},
+            {QStringLiteral("apps"), QVariantList()},
+        };
+        QVariantList withContainer = items;
+        withContainer.append(container);
+        auto *engine = qmlEngine(controller);
+        if (!engine) {
+            return false;
+        }
+        controller->setProperty("dockItems", QVariant::fromValue(engine->toScriptValue(withContainer)));
+        QVariant expected;
+        if (!QMetaObject::invokeMethod(controller, "canonicalJsonText",
+                Q_RETURN_ARG(QVariant, expected), Q_ARG(QVariant, container))) {
+            return false;
+        }
+        auto dropInContainer = [&](const QVariantList &values, const QVariant &snapshot) {
+            QVariant result;
+            if (!QMetaObject::invokeMethod(controller, "addApplicationLauncherToContainer",
+                    Q_RETURN_ARG(QVariant, result), Q_ARG(QVariant, values),
+                    Q_ARG(QVariant, items.size()), Q_ARG(QVariant, snapshot))) {
+                return QVariantMap();
+            }
+            return result.canConvert<QJSValue>()
+                ? result.value<QJSValue>().toVariant().toMap() : result.toMap();
+        };
+        const QVariantMap containerResult = dropInContainer(urls, expected);
+        const QVariantList nested = containerResult.value(QStringLiteral("container")).toMap()
+            .value(QStringLiteral("apps")).toList();
+        if (!containerResult.value(QStringLiteral("success")).toBool() || nested.size() != 2) {
+            return false;
+        }
+        const QString savedContainer = configuration->value(QStringLiteral("dockItemsJson")).toString();
+        const QVariantMap stale = dropInContainer(urls, expected);
+        return !stale.value(QStringLiteral("success")).toBool()
+            && stale.value(QStringLiteral("status")).toString() == QLatin1StringView("invalid-target")
+            && configuration->value(QStringLiteral("dockItemsJson")).toString() == savedContainer;
+    }
+
     LoadResult loadAndDestroy(uint appletId)
     {
         LoadResult result;
@@ -656,6 +764,8 @@ private:
                         } else {
                             result.dockItemCount = dockItems.toList().size();
                         }
+                        result.launcherBatchAtomic = exerciseLauncherBatch(controller, applet);
+                        drainDeferredEvents();
                     }
 
                     QObject *rootObject = item;

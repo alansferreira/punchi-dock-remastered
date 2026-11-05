@@ -282,4 +282,37 @@ TestCase {
         compare(controller.items.length, 0,
             "External operations must never insert a provisional dock item")
     }
+
+    function test_launcherBatchIsAtomicAndCancelledDraftCannotReceiveIt() {
+        const generation = controller.open("folder")
+        const first = {
+            "storageId": "org.example.First.desktop",
+            "appId": "org.example.First", "name": "First"
+        }
+        const second = {
+            "storageId": "org.example.Second.desktop",
+            "appId": "org.example.Second", "name": "Second"
+        }
+        const rejected = controller.addDroppedApplication(generation, {
+            "applications": [first, { "name": "Invalid" }]
+        })
+        verify(!rejected.changed)
+        compare(controller.draft.apps.length, 0)
+        const result = controller.addDroppedApplication(generation, {
+            "applications": [first, second, first]
+        })
+        verify(result.changed)
+        compare(result.addedCount, 2)
+        compare(controller.draft.apps.length, 2)
+        compare(controller.draft.apps[0].name, "First")
+        compare(controller.draft.apps[1].name, "Second")
+        compare(controller.items.length, 0)
+        controller.cancel()
+        const late = controller.addDroppedApplication(generation, {
+            "applications": [first, second]
+        })
+        verify(!late.changed)
+        compare(late.status, "invalid-target")
+        compare(controller.draft, null)
+    }
 }

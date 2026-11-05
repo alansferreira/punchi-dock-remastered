@@ -2341,6 +2341,15 @@ PlasmoidItem {
         }
     }
 
+    function handleApplicationLauncherDrop(urls, targetIndex, visualParent) {
+        const result = dockItemsController.pinApplicationLauncherAt(urls, targetIndex)
+        if (!result.success) {
+            dropFeedbackPopup.presentFeedback(visualParent, result.message, false)
+            return
+        }
+        dropFeedbackPopup.dismissFeedback()
+    }
+
     function handleContainerApplicationLauncherDrop(urls, targetIndex,
             expectedContainerText, visualParent, coordinator) {
         const result = dockItemsController.addApplicationLauncherToContainer(
@@ -3707,9 +3716,9 @@ PlasmoidItem {
                                 dockItemDelegate.modelData, taskState.rows,
                                 urls, visualParent, popupCoordinator)
                         }
-                        onApplicationLauncherDropped: function(urls, insertionIndex) {
-                            dockItemsController.pinApplicationLauncherAt(
-                                urls, insertionIndex)
+                        onApplicationLauncherDropped: function(urls, insertionIndex, visualParent) {
+                            root.handleApplicationLauncherDrop(
+                                urls, insertionIndex, visualParent)
                         }
                         onApplicationLauncherContainerDropped: function(
                                 urls, visualParent) {
@@ -3929,9 +3938,9 @@ PlasmoidItem {
                             root.handleApplicationUrlsDrop(
                                 modelData, taskData.rows, urls, visualParent)
                         }
-                        onApplicationLauncherDropped: function(urls, insertionIndex) {
-                            dockItemsController.pinApplicationLauncherAt(
-                                urls, root.dynamicLauncherInsertionIndex())
+                        onApplicationLauncherDropped: function(urls, insertionIndex, visualParent) {
+                            root.handleApplicationLauncherDrop(
+                                urls, root.dynamicLauncherInsertionIndex(), visualParent)
                         }
                         // qmllint enable unqualified
                         onContextMenuRequested: function(visualParent) {
@@ -4029,9 +4038,9 @@ PlasmoidItem {
                     onTaskMinimized: function(minimizedItemIndex) {
                         dockItemsController.triggerMinimizeReaction(minimizedItemIndex)
                     }
-                    onApplicationLauncherDropped: function(urls, insertionIndex) {
-                        dockItemsController.pinApplicationLauncherAt(
-                            urls, root.dynamicLauncherInsertionIndex())
+                    onApplicationLauncherDropped: function(urls, insertionIndex, visualParent) {
+                        root.handleApplicationLauncherDrop(
+                            urls, root.dynamicLauncherInsertionIndex(), visualParent)
                     }
                 }
                 RecentApplicationDockItem {

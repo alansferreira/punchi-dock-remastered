@@ -37,9 +37,11 @@ Item {
 
     visible: false
 
-    Component.onCompleted: Qt.callLater(function() {
+    function finishInitialization() {
         root.ready = true
-    })
+    }
+
+    Component.onCompleted: Qt.callLater(root.finishInitialization)
 
     onRevisionChanged: startReaction()
     onModeChanged: stopReaction()

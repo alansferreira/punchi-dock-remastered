@@ -997,36 +997,40 @@ QVariantMap SystemDiscovery::validateDroppedUrls(const QVariantList &urls) const
 
 QVariantMap SystemDiscovery::validateApplicationLauncherDrop(const QVariantList &urls) const
 {
-    if (urls.size() != 1) {
+    const DropUrlPolicy::Result validated = DropUrlPolicy::validate(urls);
+    if (!validated.accepted()) {
         return {
             {QStringLiteral("accepted"), false},
-            {QStringLiteral("errorCode"), QStringLiteral("launcher-count")},
+            {QStringLiteral("errorCode"), validated.errorCode},
         };
     }
 
-    const QUrl launcherUrl = urls.constFirst().toUrl();
-    if (!launcherUrl.isValid() || !launcherUrl.isLocalFile()
-        || !launcherUrl.host().isEmpty() || launcherUrl.hasQuery() || launcherUrl.hasFragment()) {
-        return {
-            {QStringLiteral("accepted"), false},
-            {QStringLiteral("errorCode"), QStringLiteral("invalid-launcher-url")},
-        };
+    QVariantList applications;
+    QSet<QString> seenApplications;
+    for (const QUrl &launcherUrl : validated.urls) {
+        const DesktopLauncherResolver::Resolution launcher
+            = DesktopLauncherResolver::resolveLocalFile(launcherUrl.toLocalFile());
+        if (!launcher || launcher.service->noDisplay()) {
+            return {
+                {QStringLiteral("accepted"), false},
+                {QStringLiteral("errorCode"), QStringLiteral("unsafe-launcher")},
+            };
+        }
+        QVariantMap application = serviceMap(launcher.service);
+        const QString identity = application.value(QStringLiteral("storageId")).toString().toLower();
+        if (seenApplications.contains(identity)) {
+            continue;
+        }
+        seenApplications.insert(identity);
+        application.insert(QStringLiteral("launcherUrl"),
+            QUrl::fromLocalFile(launcher.canonicalPath).toString());
+        applications.append(application);
     }
 
-    const DesktopLauncherResolver::Resolution launcher
-        = DesktopLauncherResolver::resolveLocalFile(launcherUrl.toLocalFile());
-    if (!launcher || launcher.service->noDisplay()) {
-        return {
-            {QStringLiteral("accepted"), false},
-            {QStringLiteral("errorCode"), QStringLiteral("unsafe-launcher")},
-        };
-    }
-
-    QVariantMap result = serviceMap(launcher.service);
+    QVariantMap result = applications.constFirst().toMap();
     result.insert(QStringLiteral("accepted"), true);
     result.insert(QStringLiteral("errorCode"), QString());
-    result.insert(QStringLiteral("launcherUrl"),
-        QUrl::fromLocalFile(launcher.canonicalPath).toString());
+    result.insert(QStringLiteral("applications"), applications);
     return result;
 }
 

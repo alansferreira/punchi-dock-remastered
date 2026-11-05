@@ -1561,7 +1561,107 @@ function containerApplicationIdentityKeys(application) {
     return keys
 }
 
+function addApplicationsToManualContainer(items, selectedIndex, applications) {
+    if (!(applications instanceof Array) || applications.length === 0
+            || applications.length > 64) {
+        return {
+            "items": items, "changed": false,
+            "status": "invalid-application", "container": null
+        }
+    }
+    let candidate = items
+    let addedCount = 0
+    let lastResult = null
+    let addedApplication = null
+    for (let index = 0; index < applications.length; index++) {
+        const application = applications[index]
+        if (!application || application.applications !== undefined) {
+            return {
+                "items": items, "changed": false,
+                "status": "invalid-application", "container": null
+            }
+        }
+        const result = addApplicationToManualContainer(
+            candidate, selectedIndex, application)
+        if (!result.changed && result.status !== "duplicate") {
+            return {
+                "items": items, "changed": false,
+                "status": result.status,
+                "container": items instanceof Array
+                    ? items[selectedIndex] || null : null
+            }
+        }
+        if (result.changed) {
+            candidate = result.items
+            addedCount++
+            addedApplication = result.application
+        }
+        lastResult = result
+    }
+    return {
+        "items": candidate,
+        "changed": addedCount > 0,
+        "status": addedCount > 0 ? "added" : "duplicate",
+        "container": lastResult.container,
+        "application": addedApplication,
+        "addedCount": addedCount,
+        "applicationCount": applications.length
+    }
+}
+
+function placeApplicationsOnDock(items, applications, targetIndex) {
+    const boundedTarget = Math.max(0, Math.min(items.length,
+        Number.isFinite(Number(targetIndex))
+            ? Math.round(Number(targetIndex)) : items.length))
+    const movedIndices = []
+    const descriptors = []
+    const identities = []
+    let adjustedTarget = boundedTarget
+    for (let index = 0; index < applications.length; index++) {
+        const source = applications[index]
+        const keys = containerApplicationIdentityKeys(source)
+        if (keys.some(function(key) { return identities.indexOf(key) >= 0 })) {
+            continue
+        }
+        identities.push.apply(identities, keys)
+        const existingIndex = source.existingIndex
+        if (existingIndex >= 0) {
+            if (movedIndices.indexOf(existingIndex) >= 0) {
+                continue
+            }
+            movedIndices.push(existingIndex)
+            descriptors.push(items[existingIndex])
+            if (existingIndex < boundedTarget) {
+                adjustedTarget--
+            }
+        } else {
+            descriptors.push({
+                "type": "app",
+                "name": String(source.name || source.storageId || ""),
+                "icon": String(source.icon || "application-x-executable"),
+                "storageId": String(source.storageId || ""),
+                "appId": String(source.appId || ""),
+                "command": String(source.command || ""),
+                "launcherUrl": String(source.launcherUrl || "")
+            })
+        }
+    }
+    const nextItems = items.filter(function(item, index) {
+        return movedIndices.indexOf(index) < 0
+    })
+    nextItems.splice.apply(nextItems, [adjustedTarget, 0].concat(descriptors))
+    return {
+        "items": nextItems,
+        "count": descriptors.length,
+        "moved": movedIndices.length > 0
+    }
+}
+
 function addApplicationToManualContainer(items, selectedIndex, application) {
+    if (application && application.applications !== undefined) {
+        return addApplicationsToManualContainer(
+            items, selectedIndex, application.applications)
+    }
     if (!(items instanceof Array) || !Number.isInteger(selectedIndex)
             || selectedIndex < 0 || selectedIndex >= items.length) {
         return {
